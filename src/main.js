@@ -65,7 +65,7 @@ function GetUsers(login, callback) {
     }
 
     const execCallbackFunc = json => {
-        if (!json['data']['id']) {
+        if (!json['data'] || !json['data']['id']) {
             throw new Error('[ERROR] No user_id found!');
         }
 
