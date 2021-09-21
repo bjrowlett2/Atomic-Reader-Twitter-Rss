@@ -1,6 +1,7 @@
 const Express = require('express');
 const ExpressHandlebars = require('express-handlebars');
 const NodeFetch = require('node-fetch');
+const Tweets = require('./tweets');
 
 const App = Express();
 
@@ -81,7 +82,9 @@ function GetUsers(login, callback) {
 }
 
 function GetTweets(userId, callback) {
-    const url = `https://api.twitter.com/2/users/${userId}/tweets?exclude=retweets,replies&tweet.fields=id,text,created_at&max_results=25`;
+    const exclude = 'replies,retweets';
+    const tweetFields = 'id,text,created_at,attachments,entities,public_metrics,referenced_tweets';
+    const url = `https://api.twitter.com/2/users/${userId}/tweets?exclude=${exclude}&tweet.fields=${tweetFields}&max_results=25`;
     const options = {
         headers: {
             'Authorization': `Bearer ${AccessTokenValue}`
@@ -120,7 +123,7 @@ App.get('/api/v1/:login', (request, response) => {
                         return {
                             guid: item.id,
                             title: `${login} tweeted`,
-                            description: item.text,
+                            description: Tweets.MakeHtmlDescription(item),
                             link: `https://twitter.com/${login}/status/${item.id}`,
                             published: item.created_at
                         };
