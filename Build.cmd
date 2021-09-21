@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET VERSION=1.0
+SET VERSION=1.1
 
 docker build -t dkr.atomic-reader.com/twitter-rss:%VERSION% .
 
